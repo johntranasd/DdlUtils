@@ -1,0 +1,65 @@
+<project default=""
+	     name="DdlUtils"
+	     basedir=".">
+<path id="runtime-classpath">
+    <fileset dir="dist">
+        <include name="**/*.jar"/>
+      </fileset>
+    <fileset dir="/opt/db-derby-10.5.3.0-bin/lib">
+        <include name="**/*.jar"/>
+      </fileset>
+
+
+
+  <fileset dir="lib">
+    <include name="**/*.jar"/>
+
+    <include name="**/*.zip"/>
+  </fileset>
+</path>
+
+<target name="export" description="Dumps the database structure">
+  <taskdef name="databaseToDdl"
+           classname="org.apache.ddlutils.task.DatabaseToDdlTask">
+    <classpath refid="runtime-classpath"/>
+
+  </taskdef>
+  <databaseToDdl modelName="MyModel">
+    <database url="jdbc:mysql://vcx-chrisd01:3306/polopoly"
+              driverClassName="com.mysql.jdbc.Driver"
+              username="developer"
+              password="asddeveloper"/>
+
+    <writeSchemaToFile outputFile="db-schema.xml"/>
+    <writeDataToFile outputFile="data.xml"/>
+  </databaseToDdl>
+
+</target>
+
+
+
+<target name="import"
+        description="Creates the database structure and inserts data into the database">
+  <taskdef name="ddlToDatabase"
+           classname="org.apache.ddlutils.task.DdlToDatabaseTask">
+    <classpath refid="runtime-classpath"/>
+  </taskdef>
+
+  <ddlToDatabase>
+      <database url="jdbc:derby:ddlutils"
+                driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+                username=""
+                password=""
+                id="polopolyDb"
+              />
+    <fileset dir=".">
+      <include name="*schema.xml"/>
+    </fileset>
+
+    <createDatabase failonerror="false"/>
+
+    <writeSchemaToDatabase/>
+    <writeDataToDatabase datafile="data.xml"/>
+  </ddlToDatabase>
+</target>
+</project>

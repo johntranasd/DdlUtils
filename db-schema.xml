@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database">
+  <database name="MyModel">
+    <table name="acl">
+      <column name="aclId" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="principalId" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="permission" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <index name="aclIdIndex">
+        <index-column name="aclId"/>
+      </index>
+      <index name="aclPrincipalIndex">
+        <index-column name="principalId"/>
+      </index>
+    </table>
+    <table name="aclData">
+      <column name="id" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="name" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="creationTime" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="firstOwnerId" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <unique name="aclIndex">
+        <unique-column name="id"/>
+      </unique>
+    </table>
+    <table name="aclOwner">
+      <column name="aclId" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="principalId" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <index name="aclOwnersIdIndex">
+        <index-column name="aclId"/>
+      </index>
+      <index name="aclOwnersOwnerIdx">
+        <index-column name="principalId"/>
+      </index>
+    </table>
+    <table name="attributeid">
+      <column name="id" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="attribgroup" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="name" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <unique name="attridIdx">
+        <unique-column name="id"/>
+      </unique>
+      <unique name="attridNameIdx">
+        <unique-column name="attribgroup"/>
+        <unique-column name="name"/>
+      </unique>
+    </table>
+    <table name="component">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="attributeid" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="value" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="longvalue" primaryKey="false" required="true" type="CLOB" size="16777215" autoIncrement="false"/>
+      <unique name="componentIndex">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="version"/>
+        <unique-column name="attributeid"/>
+      </unique>
+      <index name="componentAttrIdx">
+        <index-column name="attributeid"/>
+      </index>
+      <index name="componentValIdx">
+        <index-column name="value"/>
+        <index-column name="attributeid"/>
+        <index-column name="major"/>
+      </index>
+    </table>
+    <table name="contentfile">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="path" primaryKey="false" required="true" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="filedata" primaryKey="false" required="false" type="BLOB" size="2147483647" autoIncrement="false"/>
+      <column name="lastmodified" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="contentfileIdx">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="version"/>
+        <unique-column name="path"/>
+      </unique>
+    </table>
+    <table name="contentlocks">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="userid" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="sessionkey" primaryKey="false" required="false" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="locktimeouttime" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="contentlockIdx">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+      </unique>
+      <index name="clLockedByIdx">
+        <index-column name="userid"/>
+        <index-column name="locktimeouttime"/>
+      </index>
+    </table>
+    <table name="contentref">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="attributeid" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="refmajor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="refminor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="refversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="contentRefIdx">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="version"/>
+        <unique-column name="attributeid"/>
+      </unique>
+      <index name="contentrefIdIdx">
+        <index-column name="attributeid"/>
+        <index-column name="major"/>
+      </index>
+      <index name="contentrefRefIdx">
+        <index-column name="refmajor"/>
+        <index-column name="refminor"/>
+        <index-column name="attributeid"/>
+        <index-column name="refversion"/>
+      </index>
+    </table>
+    <table name="eventinfo">
+      <column name="id" primaryKey="true" required="true" type="BIGINT" size="19" autoIncrement="false"/>
+      <column name="eventtype" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="viewid" primaryKey="false" required="false" type="SMALLINT" size="5" autoIncrement="false"/>
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="timestamp" primaryKey="false" required="true" type="BIGINT" size="19" autoIncrement="false"/>
+    </table>
+    <table name="eventinfoqueue">
+      <column name="id" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="eventtype" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="viewid" primaryKey="false" required="false" type="SMALLINT" size="5" autoIncrement="false"/>
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="timestamp" primaryKey="false" required="true" type="BIGINT" size="19" autoIncrement="false"/>
+    </table>
+    <table name="externalids">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="externalid" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <unique name="externalIdIdx">
+        <unique-column name="externalid"/>
+      </unique>
+      <index name="majMinExtIdIdx">
+        <index-column name="major"/>
+        <index-column name="minor"/>
+        <index-column name="externalid"/>
+      </index>
+    </table>
+    <table name="groupData">
+      <column name="id" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="name" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="creationTime" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="firstOwnerId" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="ldapGroupDn" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
+      <unique name="groupIndex">
+        <unique-column name="id"/>
+      </unique>
+    </table>
+    <table name="groupMember">
+      <column name="groupId" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="principalId" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <index name="groupMembersIdIdx">
+        <index-column name="groupId"/>
+      </index>
+      <index name="groupMembersMemIdx">
+        <index-column name="principalId"/>
+      </index>
+    </table>
+    <table name="groupOwner">
+      <column name="groupId" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="principalId" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <index name="groupOwnersIdIdx">
+        <index-column name="groupId"/>
+      </index>
+      <index name="groupOwnersOwnIdx">
+        <index-column name="principalId"/>
+      </index>
+    </table>
+    <table name="idcounters">
+      <column name="id" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="nextid" primaryKey="false" required="true" type="BIGINT" size="19" autoIncrement="false"/>
+    </table>
+    <table name="installationinfo">
+      <column name="generation" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="timestamp" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="iiVersionIdx">
+        <unique-column name="generation"/>
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+      </unique>
+    </table>
+    <table name="majorinfo">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="nextminor" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="majorname" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="contenthomejndiname" primaryKey="false" required="true" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="contenthomeclassname" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="contentclassname" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <unique name="majorinfoIndex">
+        <unique-column name="major"/>
+      </unique>
+      <unique name="majorinfoNameIdx">
+        <unique-column name="majorname"/>
+      </unique>
+    </table>
+    <table name="minorinfo">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="branch" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="latestcommitted" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="latestversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="minorInfoBranchIdx">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="branch"/>
+      </unique>
+      <index name="minorinfLatestIdx">
+        <index-column name="latestcommitted"/>
+        <index-column name="major"/>
+        <index-column name="minor"/>
+      </index>
+    </table>
+    <table name="registeredusers">
+      <column name="loginname" primaryKey="false" required="true" type="VARCHAR" size="64" autoIncrement="false"/>
+      <column name="passwordhash" primaryKey="false" required="true" type="VARCHAR" size="64" autoIncrement="false"/>
+      <column name="regtime" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="isldapuser" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="lastlogintime" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="numlogins" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="active" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <unique name="regloginnameIdx">
+        <unique-column name="loginname"/>
+      </unique>
+    </table>
+    <table name="sessioninfo">
+      <column name="loginname" primaryKey="false" required="true" type="VARCHAR" size="64" autoIncrement="false"/>
+      <column name="sessionkey" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="expiretime" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <index name="sessionInfoIdx">
+        <index-column name="loginname"/>
+      </index>
+    </table>
+    <table name="tagid">
+      <column name="id" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="name" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <unique name="tagidIdx">
+        <unique-column name="id"/>
+      </unique>
+      <unique name="tagidNameIdx">
+        <unique-column name="name"/>
+      </unique>
+    </table>
+    <table name="taginfo">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="tagid" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="taginfoIdIndex">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="tagid"/>
+      </unique>
+      <index name="taginfoIndex">
+        <index-column name="tagid"/>
+      </index>
+    </table>
+    <table name="versioninfo">
+      <column name="major" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="minor" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="version" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="createdonbranch" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="previousversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="componentsversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="contentrefsversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="filesversion" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="committed" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="workflowapproved" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="createdby" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="committedby" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <column name="approvedby" primaryKey="false" required="false" type="VARCHAR" size="32" autoIncrement="false"/>
+      <unique name="versioninfoIndex">
+        <unique-column name="major"/>
+        <unique-column name="minor"/>
+        <unique-column name="version"/>
+      </unique>
+      <index name="viChangeIdx">
+        <index-column name="major"/>
+        <index-column name="committed"/>
+        <index-column name="version"/>
+      </index>
+      <index name="viComponentsIdx">
+        <index-column name="componentsversion"/>
+        <index-column name="major"/>
+        <index-column name="minor"/>
+      </index>
+      <index name="viContentrefsIdx">
+        <index-column name="contentrefsversion"/>
+        <index-column name="major"/>
+        <index-column name="minor"/>
+      </index>
+      <index name="viCommittedByIdx">
+        <index-column name="committedby"/>
+        <index-column name="committed"/>
+      </index>
+    </table>
+  </database>
