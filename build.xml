@@ -25,10 +25,10 @@
 
   </taskdef>
   <databaseToDdl modelName="MyModel">
-    <database url="jdbc:mysql://vcx-chrisd01:3306/polopoly"
+    <database url="jdbc:mysql://vcx-:3306/polopoly"
               driverClassName="com.mysql.jdbc.Driver"
-              username="developer"
-              password="asddeveloper"/>
+              username=""
+              password=""/>
 
     <writeSchemaToFile outputFile="db-schema.xml"/>
     <writeDataToFile outputFile="data.xml"/>
