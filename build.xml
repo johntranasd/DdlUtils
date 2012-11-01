@@ -25,7 +25,7 @@
 
   </taskdef>
   <databaseToDdl modelName="MyModel">
-    <database url="jdbc:mysql://vcx-:3306/polopoly"
+    <database url="jdbc:mysql://vcx-chrisd01:3306/polopoly"
               driverClassName="com.mysql.jdbc.Driver"
               username=""
               password=""/>
@@ -40,6 +40,7 @@
 
 <target name="import"
         description="Creates the database structure and inserts data into the database">
+    <delete dir="ddlutils"/>
   <taskdef name="ddlToDatabase"
            classname="org.apache.ddlutils.task.DdlToDatabaseTask">
     <classpath refid="runtime-classpath"/>
